@@ -9,6 +9,8 @@ interface InputProps {
   name?: string;
   isRequired?: boolean;
   error?: string; // new prop for error message
+  min?: string; // for date inputs to set minimum date
+  max?: string; // for date inputs to set maximum date
 }
 
 function Input({
@@ -22,6 +24,8 @@ function Input({
   name,
   isRequired,
   error,
+  min,
+  max,
 }: InputProps) {
   return (
     <div className="flex flex-col gap-1">
@@ -44,6 +48,8 @@ function Input({
           error ? "border-red-1" : "border-gray-300"
         } ${className}`}
         disabled={disabled}
+        min={min}
+        max={max}
       />
       {isRequired && error && (
         <p className="text-red-1 text-sm mt-1">{error}</p>

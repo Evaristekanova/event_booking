@@ -40,3 +40,12 @@ export {
   useMonthlyAnalytics,
   useCategoryAnalytics,
 } from "../hooks/useDashboard";
+
+// Lazy Loading Components
+export { default as LazyLoader } from "./shared/LazyLoader";
+export { default as LazyImage } from "./shared/LazyImage";
+export { default as LazyTable } from "./shared/LazyTable";
+
+// Lazy Loading Hooks
+export { useInfiniteScroll, useInfiniteData } from "../hooks/useInfiniteScroll";
+export { useLazyDashboard } from "../hooks/useLazyDashboard";

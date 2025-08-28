@@ -93,7 +93,7 @@ export default function SignupPage() {
       <div className="max-w-md w-full space-y-8">
         <div className="bg-white rounded-3xl shadow-2xl p-8 space-y-6">
           <div className="text-center">
-            <h1 className="text-3xl font-extrabold mb-2 text-purple-1 rounded-full px-4 py-2">
+            <h1 className="text-3xl font-extrabold mb-2 text-purple-700 rounded-full px-4 py-2">
               Create Account
             </h1>
             <p className="text-gray-600">Join our event booking platform</p>

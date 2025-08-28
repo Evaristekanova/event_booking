@@ -4,7 +4,6 @@ import React, { ReactNode } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import Loader from "./shared/Loader";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -23,16 +22,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading) {
-      if (requireAuth && !isAuthenticated) {
-        router.push(redirectTo);
-        return;
-      }
-
-      if (requireAdmin && !isAdmin) {
-        router.push("/dashboard");
-        return;
-      }
+    if (requireAuth && !isAuthenticated) {
+      router.push(redirectTo);
+    } else if (requireAdmin && !isAdmin) {
+      router.push("/dashboard");
     }
   }, [
     isAuthenticated,
@@ -43,15 +36,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     redirectTo,
     router,
   ]);
-  if (loading) {
-    return <Loader />;
-  }
 
-  if (requireAuth && !isAuthenticated) {
-    return null;
-  }
-
-  if (requireAdmin && !isAdmin) {
+  if ((requireAuth && !isAuthenticated) || (requireAdmin && !isAdmin)) {
     return null;
   }
 

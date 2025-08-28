@@ -176,7 +176,7 @@ export const getUpcomingEvents = async (limit: number = 5) => {
       date: {
         gte: new Date(),
       },
-      status: "UPCOMING",
+      // Don't filter by status to be more flexible
     },
     include: {
       organizer: {

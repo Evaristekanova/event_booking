@@ -35,13 +35,19 @@ const EventForm: React.FC<EventFormProps> = ({
 
   const [errors, setErrors] = useState<FormErrors>({});
 
+  // Get today's date in YYYY-MM-DD format for min attribute
+  const getTodayDate = (): string => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  };
+
   // Initialize form with event data if editing
   useEffect(() => {
     if (event && mode === "edit") {
       setFormData({
         title: event.title,
         description: event.description,
-        date: event.date.split("T")[0], // Convert ISO date to YYYY-MM-DD format
+        date: event.date.split("T")[0],
         time: event.time,
         location: event.location,
         capacity: event.capacity,
@@ -66,10 +72,27 @@ const EventForm: React.FC<EventFormProps> = ({
 
     if (!formData.date) {
       newErrors.date = "Date is required";
+    } else {
+      // Check if selected date is in the past
+      const selectedDate = new Date(formData.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (selectedDate < today) {
+        newErrors.date = "Event date cannot be in the past";
+      }
     }
 
     if (!formData.time) {
       newErrors.time = "Time is required";
+    } else if (formData.date) {
+      // Check if selected date and time together are in the past
+      const selectedDateTime = new Date(`${formData.date}T${formData.time}`);
+      const now = new Date();
+
+      if (selectedDateTime <= now) {
+        newErrors.time = "Event time must be in the future";
+      }
     }
 
     if (!formData.location.trim()) {
@@ -223,7 +246,11 @@ const EventForm: React.FC<EventFormProps> = ({
             onChange={handleInputChangeForInput}
             isRequired={true}
             error={errors.date}
+            min={getTodayDate()}
           />
+          <p className="text-sm text-gray-500 mt-1">
+            Only future dates are allowed
+          </p>
         </div>
 
         {/* Time */}

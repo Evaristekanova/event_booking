@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
-  // Get from local storage then parse stored json or return initialValue
   const [storedValue, setStoredValue] = useState<T>(() => {
     if (typeof window === "undefined") {
       return initialValue;
@@ -10,13 +9,9 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     try {
       const item = window.localStorage.getItem(key);
       if (!item) return initialValue;
-
-      // Try to parse as JSON first, fallback to raw string if it fails
       try {
         return JSON.parse(item);
       } catch {
-        // If JSON parsing fails, return the raw string value
-        // This handles cases where the value was stored as a plain string (like JWT tokens)
         return item as T;
       }
     } catch (error) {
@@ -25,20 +20,14 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     }
   });
 
-  // Return a wrapped version of useState's setter function that persists the new value to localStorage
   const setValue = (value: T | ((val: T) => T)) => {
     try {
-      // Allow value to be a function so we have the same API as useState
       const valueToStore =
         value instanceof Function ? value(storedValue) : value;
 
-      // Save state
       setStoredValue(valueToStore);
 
-      // Save to local storage
       if (typeof window !== "undefined") {
-        // Store primitive values (strings, numbers, booleans) directly
-        // Store objects and arrays as JSON
         if (
           typeof valueToStore === "string" ||
           typeof valueToStore === "number" ||
@@ -54,7 +43,6 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     }
   };
 
-  // Remove item from localStorage
   const removeValue = () => {
     try {
       setStoredValue(initialValue);
@@ -66,7 +54,6 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     }
   };
 
-  // Clear all localStorage
   const clearAll = () => {
     try {
       if (typeof window !== "undefined") {
@@ -78,16 +65,13 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     }
   };
 
-  // Sync with other tabs/windows
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === key && e.newValue !== null) {
         try {
-          // Try to parse as JSON first, fallback to raw string if it fails
           try {
             setStoredValue(JSON.parse(e.newValue));
           } catch {
-            // If JSON parsing fails, treat as raw string
             setStoredValue(e.newValue as T);
           }
         } catch (error) {
@@ -110,7 +94,6 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     setValue,
     removeValue,
     clearAll,
-    // Convenience getters for common types
     getString: () => (typeof storedValue === "string" ? storedValue : ""),
     getNumber: () => (typeof storedValue === "number" ? storedValue : 0),
     getBoolean: () => (typeof storedValue === "boolean" ? storedValue : false),
@@ -122,7 +105,6 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
   };
 }
 
-// Convenience hooks for common types
 export function useLocalStorageString(key: string, initialValue: string = "") {
   return useLocalStorage(key, initialValue);
 }

@@ -1,11 +1,10 @@
 "use client";
 
-import Image from "next/image";
-
 import { CiLocationOn, CiCalendarDate } from "react-icons/ci";
 import { IoIosPeople } from "react-icons/io";
 
 import { Event as EventType } from "@/types";
+import LazyImage from "./shared/LazyImage";
 
 interface EventCardProps {
   event: EventType;
@@ -48,16 +47,15 @@ export const EventCard: React.FC<EventCardProps> = ({
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
       {/* Event Image */}
       <div className="h-48 bg-gray-200 overflow-hidden">
-        <Image
+        <LazyImage
           src={
             event?.imageUrl ||
             "https://images.pexels.com/photos/301987/pexels-photo-301987.jpeg"
           }
           alt={event.title}
-          className="w-full h-full object-cover"
           width={500}
           height={500}
-          quality={100}
+          className="w-full h-full"
         />
       </div>
       {/* Event Header */}

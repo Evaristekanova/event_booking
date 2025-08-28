@@ -16,10 +16,20 @@ const router = Router();
 router.get("/stats", authenticateToken, getDashboardStatistics);
 router.get("/activities", authenticateToken, getRecentActivitiesHandler);
 router.get("/upcoming-events", authenticateToken, getUpcomingEventsHandler);
+router.get("/top-events", authenticateToken, getTopEventsHandler);
 
 // Admin only routes
-router.get("/analytics/monthly", authenticateToken, validateRole(["ADMIN"]), getMonthlyAnalyticsHandler);
-router.get("/analytics/category", authenticateToken, validateRole(["ADMIN"]), getCategoryAnalyticsHandler);
-router.get("/analytics/top-events", authenticateToken, validateRole(["ADMIN"]), getTopEventsHandler);
+router.get(
+  "/analytics/monthly",
+  authenticateToken,
+  validateRole(["ADMIN"]),
+  getMonthlyAnalyticsHandler,
+);
+router.get(
+  "/analytics/category",
+  authenticateToken,
+  validateRole(["ADMIN"]),
+  getCategoryAnalyticsHandler,
+);
 
 export default router;
