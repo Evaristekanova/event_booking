@@ -4,44 +4,10 @@ import React, { useState } from "react";
 import Input from "../../components/Input";
 import Button from "@/app/components/shared/Button";
 import Link from "next/link";
-import { useMutation } from "@tanstack/react-query";
-import { loginApi } from "@/app/_services/userServiceApi";
-import { toast } from "react-toastify";
-import { useAuth } from "@/app/contexts/AuthContext";
-import { useRouter } from "next/navigation";
+import { useLogin } from "@/app/hooks";
 
 export default function Login() {
-  const { login } = useAuth();
-  const router = useRouter();
-
-  const {
-    mutate: loginFn,
-    isPending,
-    error,
-  } = useMutation({
-    mutationFn: ({ email, password }: { email: string; password: string }) =>
-      loginApi(email, password),
-    onSuccess: (data) => {
-      console.log("Login API response:", data);
-
-      // Check if the response has the expected structure
-      if (data.success && data.data && data.data.user && data.data.token) {
-        toast.success(data.message || "Login successful!");
-        login({
-          user: data.data.user,
-          token: data.data.token,
-        });
-        router.push("/dashboard");
-      } else {
-        console.error("Invalid login response structure:", data);
-        toast.error("Invalid response from server");
-      }
-    },
-    onError: (error) => {
-      console.log(error);
-      toast.error(error.message);
-    },
-  });
+  const { mutate: loginFn, isPending } = useLogin();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -72,12 +38,10 @@ export default function Login() {
 
     if (Object.keys(newErrors).length > 0) return;
     loginFn(formData);
-    if (!error) {
-      setFormData({
-        email: "",
-        password: "",
-      });
-    }
+    setFormData({
+      email: "",
+      password: "",
+    });
   };
 
   return (

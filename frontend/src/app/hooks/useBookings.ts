@@ -28,10 +28,10 @@ export const bookingKeys = {
 };
 
 // Hook for getting all bookings (admin only)
-export const useAllBookings = (page: number = 1, limit: number = 10) => {
+export const useAllBookings = () => {
   const { token, isAdmin } = useAuth();
   return useQuery({
-    queryKey: bookingKeys.list({ page, limit }),
+    queryKey: ["all-bookings"],
     queryFn: () => getAllBookingsApi(token!),
     enabled: !!token && isAdmin,
   });
@@ -56,7 +56,6 @@ export const useBooking = (id: string) => {
     queryKey: bookingKeys.detail(id),
     queryFn: () => getBookingByIdApi(id, token!),
     enabled: !!id && !!token,
-    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };
 
@@ -68,7 +67,6 @@ export const useBookingStats = () => {
     queryKey: bookingKeys.stats(),
     queryFn: () => getBookingStatsApi(token!),
     enabled: !!token && isAdmin,
-    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };
 
@@ -82,10 +80,8 @@ export const useCreateBooking = () => {
       createBookingApi(bookingData, token!),
     onSuccess: () => {
       toast.success("Booking created successfully!");
-      queryClient.invalidateQueries({ queryKey: bookingKeys.lists() });
-      queryClient.invalidateQueries({
-        queryKey: bookingKeys.userList({ page: 1, limit: 10 }),
-      });
+      queryClient.invalidateQueries({ queryKey: ["all-bookings"] });
+      queryClient.invalidateQueries({ queryKey: ["user-bookings"] });
       queryClient.invalidateQueries({ queryKey: bookingKeys.stats() });
     },
     onError: (error: Error) => {
@@ -94,7 +90,6 @@ export const useCreateBooking = () => {
   });
 };
 
-// Hook for updating a booking
 export const useUpdateBooking = () => {
   const queryClient = useQueryClient();
   const { token } = useAuth();
@@ -109,10 +104,8 @@ export const useUpdateBooking = () => {
     }) => updateBookingApi(id, bookingData, token!),
     onSuccess: (updatedBooking) => {
       toast.success("Booking updated successfully!");
-      queryClient.invalidateQueries({ queryKey: bookingKeys.lists() });
-      queryClient.invalidateQueries({
-        queryKey: bookingKeys.userList({ page: 1, limit: 10 }),
-      });
+      queryClient.invalidateQueries({ queryKey: ["all-bookings"] });
+      queryClient.invalidateQueries({ queryKey: ["user-bookings"] });
       queryClient.invalidateQueries({
         queryKey: bookingKeys.detail(updatedBooking.id),
       });
@@ -133,10 +126,8 @@ export const useCancelBooking = () => {
     mutationFn: (id: string) => cancelBookingApi(id, token!),
     onSuccess: () => {
       toast.success("Booking cancelled successfully!");
-      queryClient.invalidateQueries({ queryKey: bookingKeys.lists() });
-      queryClient.invalidateQueries({
-        queryKey: bookingKeys.userList({ page: 1, limit: 10 }),
-      });
+      queryClient.invalidateQueries({ queryKey: ["all-bookings"] });
+      queryClient.invalidateQueries({ queryKey: ["user-bookings"] });
       queryClient.invalidateQueries({ queryKey: bookingKeys.stats() });
     },
     onError: (error: Error) => {
@@ -155,10 +146,8 @@ export const useConfirmBooking = () => {
       updateBookingApi(id, { status: "CONFIRMED" }, token!),
     onSuccess: (updatedBooking) => {
       toast.success("Booking confirmed successfully!");
-      queryClient.invalidateQueries({ queryKey: bookingKeys.lists() });
-      queryClient.invalidateQueries({
-        queryKey: bookingKeys.userList({ page: 1, limit: 10 }),
-      });
+      queryClient.invalidateQueries({ queryKey: ["all-bookings"] });
+      queryClient.invalidateQueries({ queryKey: ["user-bookings"] });
       queryClient.invalidateQueries({
         queryKey: bookingKeys.detail(updatedBooking.id),
       });
@@ -180,10 +169,8 @@ export const useCompleteBooking = () => {
       updateBookingApi(id, { status: "COMPLETED" }, token!),
     onSuccess: (updatedBooking) => {
       toast.success("Booking marked as completed!");
-      queryClient.invalidateQueries({ queryKey: bookingKeys.lists() });
-      queryClient.invalidateQueries({
-        queryKey: bookingKeys.userList({ page: 1, limit: 10 }),
-      });
+      queryClient.invalidateQueries({ queryKey: ["all-bookings"] });
+      queryClient.invalidateQueries({ queryKey: ["user-bookings"] });
       queryClient.invalidateQueries({
         queryKey: bookingKeys.detail(updatedBooking.id),
       });

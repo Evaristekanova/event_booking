@@ -4,43 +4,10 @@ import React, { useState } from "react";
 import Input from "../../components/Input";
 import Button from "@/app/components/shared/Button";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
-import { useMutation } from "@tanstack/react-query";
-import { signupApi } from "@/app/_services/userServiceApi";
-import { useAuth } from "@/app/contexts/AuthContext";
+import { useRegister } from "@/app/hooks";
 
 export default function SignupPage() {
-  const { login } = useAuth();
-  const router = useRouter();
-
-  const {
-    mutate: signupFn,
-    isPending,
-    error,
-  } = useMutation({
-    mutationFn: ({
-      email,
-      password,
-      fullName,
-      phone,
-    }: {
-      email: string;
-      password: string;
-      fullName: string;
-      phone: string;
-    }) => signupApi(fullName, email, phone, password),
-    onSuccess: (data) => {
-      toast.success(data.message);
-      console.log(data);
-      login(data);
-      router.push("/dashboard");
-    },
-    onError: (error) => {
-      console.log(error);
-      toast.error(error.message);
-    },
-  });
+  const { mutate: signupFn, isPending, error } = useRegister();
 
   const [formData, setFormData] = useState({
     fullName: "",

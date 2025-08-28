@@ -5,7 +5,9 @@ import { LuArrowUpDown } from "react-icons/lu";
 import { Event as EventType } from "../../../_services/eventServiceApi";
 
 export function EventColumns(
-  onView?: (event: EventType) => void
+  onView?: (event: EventType) => void,
+  onEdit?: (event: EventType) => void,
+  isAdmin: boolean = false
 ): ColumnDef<EventType, unknown>[] {
   return [
     {
@@ -63,11 +65,14 @@ export function EventColumns(
       id: "actions",
       header: "Actions",
       cell: ({ row }) => {
-        // Use the string ID directly since backend uses string IDs
-        const eventId = row.original?.id || "";
+        const event = row.original;
 
         return (
-          <ActionsCell id={eventId} onView={() => onView?.(row.original)} />
+          <ActionsCell
+            id={event.id}
+            onView={() => onView?.(event)}
+            onEdit={isAdmin ? () => onEdit?.(event) : undefined}
+          />
         );
       },
     },
