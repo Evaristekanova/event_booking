@@ -11,8 +11,7 @@ import {
 } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { enUS } from "date-fns/locale";
-import { Event as EventType } from "../_services/eventServiceApi";
-import { Booking } from "../_services/bookingServiceApi";
+import { Event as EventType, Booking } from "@/types";
 import Modal from "./shared/Modal";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";

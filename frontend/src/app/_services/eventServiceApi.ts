@@ -1,51 +1,6 @@
+import {  CreateEventInput, UpdateEventInput, Event } from "../../types";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-export interface Event {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  time: string;
-  location: string;
-  capacity: number;
-  attendees: number;
-  price: number;
-  status: "UPCOMING" | "ONGOING" | "COMPLETED" | "CANCELLED";
-  category: string;
-  imageUrl?: string;
-  organizerId: string;
-  organizer: {
-    id: string;
-    fullName: string;
-  };
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface CreateEventInput {
-  title: string;
-  description: string;
-  date: string;
-  time: string;
-  location: string;
-  capacity: number;
-  price: number;
-  category: string;
-  imageUrl?: string;
-}
-
-export interface UpdateEventInput {
-  title?: string;
-  description?: string;
-  date?: string;
-  time?: string;
-  location?: string;
-  capacity?: number;
-  price?: number;
-  status?: "UPCOMING" | "ONGOING" | "COMPLETED" | "CANCELLED";
-  category?: string;
-  imageUrl?: string;
-}
 
 export interface EventsResponse {
   events: Event[];
@@ -77,7 +32,6 @@ export const getEventsApi = async () => {
   }
 };
 
-// Get event by ID
 export const getEventByIdApi = async (id: string): Promise<Event> => {
   try {
     const response = await fetch(`${API_URL}/api/v1/events/${id}`, {

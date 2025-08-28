@@ -1,35 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Event } from "../../_services/eventServiceApi";
+import { Event, EventFormData, FormErrors } from "../../../types";
 import Button from "./Button";
 import Input from "../Input";
-
-export interface EventFormData {
-  title: string;
-  description: string;
-  date: string;
-  time: string;
-  location: string;
-  capacity: number;
-  price: number;
-  category: string;
-  imageUrl?: string;
-  status?: "UPCOMING" | "ONGOING" | "COMPLETED" | "CANCELLED";
-}
-
-interface FormErrors {
-  title?: string;
-  description?: string;
-  date?: string;
-  time?: string;
-  location?: string;
-  capacity?: string;
-  price?: string;
-  category?: string;
-  imageUrl?: string;
-  status?: string;
-}
 
 interface EventFormProps {
   event?: Event;

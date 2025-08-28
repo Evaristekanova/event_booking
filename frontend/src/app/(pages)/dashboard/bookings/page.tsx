@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useEffect } from "react";
 import { ProtectedRoute } from "../../../components/ProtectedRoute";
 import { DashboardLayout } from "../../../components/DashboardLayout";
 import { useUserBookings } from "../../../hooks/useBookings";
@@ -10,9 +9,6 @@ import { BookingColumns } from "./BookingColumns";
 
 export default function BookingsPage() {
   const { data: bookings, isPending, error } = useUserBookings();
-  useEffect(() => {
-    console.log(bookings);
-  }, [bookings]);
 
   if (isPending) {
     return <Loader />;

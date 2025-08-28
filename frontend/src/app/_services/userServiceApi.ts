@@ -1,3 +1,5 @@
+import { UpdateProfileInput } from "../../types";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const loginApi = async (email: string, password: string) => {
@@ -70,11 +72,7 @@ export const getProfileApi = async (token: string) => {
 
 export const updateProfileApi = async (
   token: string,
-  userData: {
-    fullName?: string;
-    phone?: string;
-    password?: string;
-  }
+  userData: UpdateProfileInput
 ) => {
   try {
     const response = await fetch(`${API_URL}/api/v1/users/profile`, {

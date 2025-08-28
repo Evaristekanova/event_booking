@@ -8,10 +8,8 @@ import {
   deleteEventApi,
   getEventsByCategoryApi,
   getUpcomingEventsApi,
-  type Event,
-  type CreateEventInput,
-  type UpdateEventInput,
 } from "../_services/eventServiceApi";
+import { Event, CreateEventInput, UpdateEventInput } from "../../types";
 import { useAuth } from "../contexts/AuthContext";
 
 // Query keys

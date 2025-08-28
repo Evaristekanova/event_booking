@@ -2,7 +2,7 @@
 import { type ColumnDef } from "@tanstack/react-table";
 import { ActionsCell } from "@/app/components/table/ActionCell";
 import { LuArrowUpDown } from "react-icons/lu";
-import { Event as EventType } from "../../../_services/eventServiceApi";
+import { Event as EventType } from "@/types";
 
 export function EventColumns(
   onView?: (event: EventType) => void,

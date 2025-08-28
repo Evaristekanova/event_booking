@@ -1,4 +1,4 @@
-import { MdDashboard, MdEvent, MdBarChart } from "react-icons/md";
+import { MdDashboard, MdEvent } from "react-icons/md";
 import { LuCalendar } from "react-icons/lu";
 import { LuUsers } from "react-icons/lu";
 import { FaBook } from "react-icons/fa";
@@ -30,19 +30,12 @@ export const navItems: NavItem[] = [
     label: "Bookings",
     href: "/dashboard/bookings",
     icon: <FaBook size={20} />,
-    
   },
   // Admin-only items
   {
     label: "Users",
     href: "/dashboard/users",
     icon: <LuUsers size={20} />,
-    adminOnly: true,
-  },
-  {
-    label: "Analytics",
-    href: "/dashboard/analytics",
-    icon: <MdBarChart size={20} />,
     adminOnly: true,
   },
 ];

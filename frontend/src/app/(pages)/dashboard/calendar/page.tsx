@@ -8,8 +8,7 @@ import { useEvents } from "../../../hooks/useEvents";
 import { EventCalendar } from "../../../components/EventCalendar";
 import Loader from "@/app/components/shared/Loader";
 import { useUserBookings } from "@/app/hooks/useBookings";
-import { Event as EventType } from "../../../_services/eventServiceApi";
-import { Booking } from "../../../_services/bookingServiceApi";
+import { Event as EventType, Booking } from "@/types";
 
 export default function CalendarPage() {
   const { user } = useAuth();
@@ -48,10 +47,10 @@ export default function CalendarPage() {
       return (
         bookings?.data?.map((booking: Booking) => ({
           id: booking.id,
-          title: booking.event.title,
-          date: booking.event.date,
-          time: booking.event.time,
-          location: booking.event.location,
+          title: booking?.event?.title,
+          date: booking?.event?.date,
+          time: booking?.event?.time,
+          location: booking?.event?.location,
           capacity: 0,
           price: 0,
           description: "",

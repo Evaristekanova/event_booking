@@ -4,7 +4,7 @@ import { ProtectedRoute } from "../../../components/ProtectedRoute";
 import { DashboardLayout } from "../../../components/DashboardLayout";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useEvents } from "../../../hooks/useEvents";
-import { Event as EventType } from "../../../_services/eventServiceApi";
+import { EventFormData, Event as EventType } from "@/types";
 import Table from "@/app/components/table/table";
 import { EventColumns } from "./EventColumn";
 import Loader from "@/app/components/shared/Loader";
@@ -12,13 +12,11 @@ import Button from "@/app/components/shared/Button";
 import { useEffect, useState } from "react";
 import Modal from "@/app/components/shared/Modal";
 import { EventCard } from "@/app/components/EventCard";
-import { CreateBookingInput } from "@/app/_services/bookingServiceApi";
 import { EventForm } from "@/app/components";
-import { EventFormData } from "@/app/components/shared/EventForm";
 import { useUpdateEvent, useCreateEvent } from "@/app/hooks/useEvents";
 import { useCreateBooking } from "@/app/hooks/useBookings";
 import { toast } from "react-toastify";
-
+import { CreateBookingInput } from "@/types";
 export default function EventsPage() {
   const { user } = useAuth();
   const isAdmin = user?.role === "ADMIN";
@@ -87,7 +85,7 @@ export default function EventsPage() {
   useEffect(() => {
     if (isAdmin) {
       const adminEvents = eventsData?.data?.filter((event: EventType) =>
-        event.organizer.id === user?.id ? event : null
+        event.organizer?.id === user?.id ? event : null
       );
       setEvents(adminEvents || []);
     } else {

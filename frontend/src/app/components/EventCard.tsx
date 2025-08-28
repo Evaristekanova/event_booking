@@ -5,7 +5,7 @@ import Image from "next/image";
 import { CiLocationOn, CiCalendarDate } from "react-icons/ci";
 import { IoIosPeople } from "react-icons/io";
 
-import { Event as EventType } from "../_services/eventServiceApi";
+import { Event as EventType } from "@/types";
 
 interface EventCardProps {
   event: EventType;
@@ -93,7 +93,7 @@ export const EventCard: React.FC<EventCardProps> = ({
         <div className="flex items-center justify-between text-sm mb-1">
           <span className="text-gray-600">Attendance</span>
           <span className="text-gray-900 font-medium">
-            {getAttendancePercentage(event.attendees, event.capacity)}%
+            {getAttendancePercentage(event!.attendees!, event.capacity)}%
           </span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
@@ -101,7 +101,7 @@ export const EventCard: React.FC<EventCardProps> = ({
             className="bg-purple-600 h-2 rounded-full transition-all duration-300"
             style={{
               width: `${getAttendancePercentage(
-                event.attendees,
+                event.attendees!,
                 event.capacity
               )}%`,
             }}

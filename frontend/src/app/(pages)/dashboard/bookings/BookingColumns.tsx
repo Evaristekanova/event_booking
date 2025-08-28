@@ -1,13 +1,13 @@
 // bookingColumns.tsx
 import { type ColumnDef } from "@tanstack/react-table";
 import { LuArrowUpDown } from "react-icons/lu";
-import { type Booking } from "@/app/_services/bookingServiceApi";
+import { type Booking } from "@/types";
 
 export function BookingColumns(): ColumnDef<Booking, unknown>[] {
   return [
     {
       id: "eventTitle",
-      accessorFn: (row) => row.event.title,
+      accessorFn: (row) => row.event?.title,
       cell: (info) => <span>{info.getValue<string>()}</span>,
       header: ({ column }) => (
         <span
@@ -26,7 +26,7 @@ export function BookingColumns(): ColumnDef<Booking, unknown>[] {
     },
     {
       accessorKey: "eventDate",
-      accessorFn: (row) => row.event.date,
+      accessorFn: (row) => row.event?.date,
       cell: (info) => (
         <p>{new Date(info.getValue<string>()).toLocaleDateString()}</p>
       ),

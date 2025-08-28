@@ -8,10 +8,9 @@ import {
   updateBookingApi,
   cancelBookingApi,
   getBookingStatsApi,
-  type CreateBookingInput,
-  type UpdateBookingInput,
 } from "../_services/bookingServiceApi";
 import { useAuth } from "../contexts/AuthContext";
+import { CreateBookingInput, UpdateBookingInput } from "@/types";
 
 // Query keys
 export const bookingKeys = {
