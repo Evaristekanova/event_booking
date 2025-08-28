@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Input from "../../components/Input";
-import Button from "@/app/components/Button";
+import Button from "@/app/components/shared/Button";
 import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
 import { loginApi } from "@/app/_services/userServiceApi";
@@ -22,10 +22,20 @@ export default function Login() {
     mutationFn: ({ email, password }: { email: string; password: string }) =>
       loginApi(email, password),
     onSuccess: (data) => {
-      toast.success(data.message);
-      console.log(data);
-      login(data);
-      router.push("/dashboard");
+      console.log("Login API response:", data);
+
+      // Check if the response has the expected structure
+      if (data.success && data.data && data.data.user && data.data.token) {
+        toast.success(data.message || "Login successful!");
+        login({
+          user: data.data.user,
+          token: data.data.token,
+        });
+        router.push("/dashboard");
+      } else {
+        console.error("Invalid login response structure:", data);
+        toast.error("Invalid response from server");
+      }
     },
     onError: (error) => {
       console.log(error);

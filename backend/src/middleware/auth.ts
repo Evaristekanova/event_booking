@@ -10,7 +10,7 @@ declare global {
   namespace Express {
     interface Request {
       user?: {
-        id: number;
+        id: string;
         email: string;
         role: string;
       };
@@ -31,7 +31,7 @@ export const authenticateToken = async (
       return res.status(401).json({ message: "Access token required" });
     }
 
-    const decoded = verifyToken(token) as { id: number; email: string };
+    const decoded = verifyToken(token) as { id: string; email: string };
 
     // Verify user still exists in database
     const user = await prisma.user.findUnique({

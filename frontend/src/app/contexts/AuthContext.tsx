@@ -12,9 +12,11 @@ import { useLocalStorage } from "../hooks";
 interface User {
   id: string;
   email: string;
-  name: string;
+  fullName: string;
+  phone: string;
   role: "USER" | "ADMIN";
   createdAt: string;
+  updatedAt: string;
 }
 
 interface AuthContextType {

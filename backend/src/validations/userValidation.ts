@@ -46,9 +46,24 @@ export const updateUserSchema = z.object({
   password: passwordSchema.optional(),
 });
 
+// Admin user update validation
+export const adminUpdateUserSchema = z.object({
+  fullName: z
+    .string()
+    .min(2, "Full name must be at least 2 characters")
+    .max(100, "Full name must be less than 100 characters")
+    .regex(/^[a-zA-Z\s]+$/, "Full name can only contain letters and spaces")
+    .optional(),
+  email: emailStringSchema.optional(),
+  phone: phoneSchema,
+  password: passwordSchema.optional(),
+  role: z.enum(["USER", "ADMIN"]).optional(),
+  status: z.enum(["ACTIVE", "INACTIVE"]).optional(),
+});
+
 // User ID validation
 export const userIdSchema = z.object({
-  id: z.number().int().positive("User ID must be a positive integer"),
+  id: z.string().min(1, "User ID is required"),
 });
 
 // Email validation
@@ -80,6 +95,7 @@ export const searchSchema = z.object({
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
+export type AdminUpdateUserInput = z.infer<typeof adminUpdateUserSchema>;
 export type UserIdInput = z.infer<typeof userIdSchema>;
 export type EmailInput = z.infer<typeof emailSchema>;
 export type PaginationInput = z.infer<typeof paginationSchema>;

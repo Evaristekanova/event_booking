@@ -2,7 +2,7 @@ import React from "react";
 
 interface ButtonProps {
   type?: "button" | "submit" | "reset";
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: () => void;
   children?: React.ReactNode;
   text?: string;
   className?: string;
@@ -22,7 +22,7 @@ function Button({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`px-4 py-2 flex gap-1 items-center ${className} bg-purple-1 text-white rounded-full hover:bg-purple-2 transition-all duration-300`}
+      className={`px-4 py-2 flex gap-1 items-center ${className} bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-all duration-300`}
     >
       {children}
       {text}

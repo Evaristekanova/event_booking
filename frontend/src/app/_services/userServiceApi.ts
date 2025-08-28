@@ -2,7 +2,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const loginApi = async (email: string, password: string) => {
   try {
-    const response = await fetch(`${API_URL}/api/v1/login`, {
+    const response = await fetch(`${API_URL}/api/v1/users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export const signupApi = async (
   password: string
 ) => {
   try {
-    const response = await fetch(`${API_URL}/api/v1/register`, {
+    const response = await fetch(`${API_URL}/api/v1/users/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

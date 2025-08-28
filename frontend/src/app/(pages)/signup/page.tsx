@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Input from "../../components/Input";
-import Button from "@/app/components/Button";
+import Button from "@/app/components/shared/Button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";

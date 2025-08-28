@@ -1,36 +1,184 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Event Booking Frontend
+
+A modern React-based frontend for the Event Booking system, built with Next.js 15, TypeScript, and Tailwind CSS.
+
+## Features
+
+- **Authentication System**: Login/signup with JWT tokens
+- **Role-Based Access Control**: Admin and regular user roles
+- **Event Management**: View, create, edit, and delete events
+- **Booking System**: Book events, manage bookings, and track status
+- **Responsive Design**: Mobile-first design with Tailwind CSS
+- **Real-time Data**: React Query for efficient data fetching and caching
+- **Toast Notifications**: User feedback with react-toastify
+
+## Tech Stack
+
+- **Framework**: Next.js 15 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **State Management**: React Query (TanStack Query)
+- **Authentication**: JWT with custom hooks
+- **Notifications**: react-toastify
+- **Icons**: react-icons
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- Backend API running (see backend README)
+
+### Installation
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create environment file:
+
+```bash
+cp .env.local.example .env.local
+```
+
+3. Update `.env.local` with your backend URL:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3001
+```
+
+4. Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── (pages)/          # Route groups
+│   │   ├── dashboard/    # Protected dashboard routes
+│   │   ├── login/        # Authentication pages
+│   │   └── signup/       # User registration
+│   ├── components/       # Reusable UI components
+│   ├── contexts/         # React contexts (Auth)
+│   ├── hooks/            # Custom React hooks
+│   ├── _services/        # API service functions
+│   └── lib/              # Utility functions
+```
 
-## Learn More
+## API Integration
 
-To learn more about Next.js, take a look at the following resources:
+### Events API
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `GET /api/v1/events` - List all events with pagination
+- `GET /api/v1/events/:id` - Get event by ID
+- `POST /api/v1/events` - Create new event (admin only)
+- `PUT /api/v1/events/:id` - Update event (admin/organizer only)
+- `DELETE /api/v1/events/:id` - Delete event (admin/organizer only)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Bookings API
 
-## Deploy on Vercel
+- `GET /api/v1/bookings` - List all bookings (admin only)
+- `GET /api/v1/bookings/user` - Get user's own bookings
+- `GET /api/v1/bookings/:id` - Get booking by ID
+- `POST /api/v1/bookings` - Create new booking
+- `PUT /api/v1/bookings/:id` - Update booking status
+- `DELETE /api/v1/bookings/:id` - Cancel booking
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Custom Hooks
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### useEvents
+
+- `useEvents(page, limit)` - Fetch paginated events
+- `useEvent(id)` - Fetch single event
+- `useCreateEvent()` - Create new event
+- `useUpdateEvent()` - Update existing event
+- `useDeleteEvent()` - Delete event
+
+### useBookings
+
+- `useAllBookings(page, limit)` - Fetch all bookings (admin)
+- `useUserBookings(page, limit)` - Fetch user's bookings
+- `useCreateBooking()` - Create new booking
+- `useConfirmBooking()` - Confirm pending booking
+- `useCancelBooking()` - Cancel booking
+
+## Authentication
+
+The app uses JWT tokens stored in localStorage with automatic token refresh. Protected routes are wrapped with the `ProtectedRoute` component.
+
+### User Roles
+
+- **ADMIN**: Full access to all features
+- **USER**: Can view events, make bookings, and manage their own bookings
+
+## Styling
+
+Built with Tailwind CSS for consistent, responsive design. Custom components follow the design system with purple as the primary color.
+
+## Development
+
+### Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+
+### Code Style
+
+- TypeScript strict mode enabled
+- ESLint with Next.js recommended rules
+- Prettier for code formatting
+- Component-based architecture
+- Custom hooks for business logic
+
+## Testing
+
+The app includes comprehensive error handling, loading states, and user feedback. Test with the seeded data from the backend:
+
+### Test Accounts
+
+- **Admin**: `admin@example.com` / `admin123`
+- **User**: `john@example.com` / `password123`
+
+## Deployment
+
+1. Build the application:
+
+```bash
+npm run build
+```
+
+2. Start the production server:
+
+```bash
+npm run start
+```
+
+3. Set environment variables for production:
+
+```env
+NEXT_PUBLIC_API_URL=https://your-backend-url.com
+NODE_ENV=production
+```
+
+## Contributing
+
+1. Follow the existing code style
+2. Use TypeScript for all new code
+3. Create custom hooks for business logic
+4. Add proper error handling and loading states
+5. Test with different user roles
+
+## License
+
+ISC

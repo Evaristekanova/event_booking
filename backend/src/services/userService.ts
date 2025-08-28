@@ -1,27 +1,29 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User, Role } from "@prisma/client";
+import { hashPassword, comparePassword } from "../helpers/bycrpt";
+import { generateToken } from "../helpers/jwt";
 import {
   CreateUserInput,
   UpdateUserInput,
-  createUserSchema,
-  loginSchema,
-  updateUserSchema,
 } from "../validations/userValidation";
-import { comparePassword, hashPassword } from "../helpers/bycrpt";
-import { generateToken } from "../helpers/jwt";
 
 const prisma = new PrismaClient();
 
 export const createUser = async (data: CreateUserInput) => {
-  // Validate input data
-  const validatedData = createUserSchema.parse(data);
+  const existingUser = await prisma.user.findUnique({
+    where: { email: data.email },
+  });
 
-  const hashedPassword = await hashPassword(validatedData.password);
+  if (existingUser) {
+    throw new Error("User with this email already exists");
+  }
+
+  const hashedPassword = await hashPassword(data.password);
 
   const user = await prisma.user.create({
     data: {
-      fullName: validatedData.fullName,
-      phone: validatedData.phone,
-      email: validatedData.email,
+      fullName: data.fullName,
+      phone: data.phone,
+      email: data.email,
       password: hashedPassword,
     },
   });
@@ -37,67 +39,20 @@ export const createUser = async (data: CreateUserInput) => {
   };
 };
 
-export const findUserByEmail = async (email: string) => {
-  // Validate email format
-  const { email: validatedEmail } = loginSchema
-    .pick({ email: true })
-    .parse({ email });
-
-  return prisma.user.findUnique({
-    where: { email: validatedEmail },
+export const loginUser = async (email: string, password: string) => {
+  const user = await prisma.user.findUnique({
+    where: { email },
   });
-};
 
-export const getUsers = async () => {
-  const users = await prisma.user.findMany();
-  return {
-    message: "Users fetched successfully",
-    users,
-  };
-};
-
-export const findUserById = async (id: number) => {
-  return prisma.user.findUnique({
-    where: { id },
-  });
-};
-
-export const updateUser = async (id: number, data: UpdateUserInput) => {
-  // Validate update data
-  const validatedData = updateUserSchema.parse(data);
-
-  const updateData: any = { ...validatedData };
-
-  if (validatedData.password) {
-    updateData.password = await hashPassword(validatedData.password);
+  if (!user) {
+    throw new Error("Invalid email or password");
   }
 
-  if (!validatedData.password) {
-    delete updateData.password;
+  const isPasswordValid = await comparePassword(password, user.password);
+
+  if (!isPasswordValid) {
+    throw new Error("Invalid email or password");
   }
-
-  return prisma.user.update({
-    where: { id },
-    data: updateData,
-  });
-};
-
-export const login = async (email: string, password: string) => {
-  // Validate login input
-  const { email: validatedEmail, password: validatedPassword } =
-    loginSchema.parse({
-      email,
-      password,
-    });
-
-  const user = await findUserByEmail(validatedEmail);
-  if (!user) throw new Error("Invalid Credentials");
-
-  const isPasswordValid = await comparePassword(
-    validatedPassword,
-    user.password,
-  );
-  if (!isPasswordValid) throw new Error("Invalid Credentials");
 
   const token = generateToken({ id: user.id, email: user.email });
 
@@ -108,4 +63,94 @@ export const login = async (email: string, password: string) => {
     token,
     user: userWithoutPassword,
   };
+};
+
+export const getUserById = async (id: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      fullName: true,
+      email: true,
+      phone: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+
+  return user;
+};
+
+export const updateUser = async (
+  id: string,
+  data: UpdateUserInput,
+  currentUserId: string,
+) => {
+  // Users can only update their own profile
+  if (id !== currentUserId) {
+    throw new Error("You can only update your own profile");
+  }
+
+  const updateData: any = { ...data };
+
+  if (data.password) {
+    updateData.password = await hashPassword(data.password);
+  }
+
+  const user = await prisma.user.update({
+    where: { id },
+    data: updateData,
+    select: {
+      id: true,
+      fullName: true,
+      email: true,
+      phone: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+
+  return user;
+};
+
+export const getAllUsers = async (page: number = 1, limit: number = 10) => {
+  const skip = (page - 1) * limit;
+
+  const [users, total] = await Promise.all([
+    prisma.user.findMany({
+      skip,
+      take: limit,
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        phone: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.user.count(),
+  ]);
+
+  return {
+    users,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+    },
+  };
+};
+
+export const deleteUser = async (id: string) => {
+  const user = await prisma.user.delete({
+    where: { id },
+  });
+
+  return user;
 };
