@@ -78,6 +78,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <ul className="space-y-2">
             {filteredNavItems.map((item) => {
               const isActive = pathname === item.href;
+              if (item.label === "Bookings" && isAdmin) return null;
               return (
                 <SidebarLink
                   key={item.href}

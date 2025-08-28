@@ -1,11 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  Event,
-  CreateEventInput,
-  UpdateEventInput,
-} from "../../_services/eventServiceApi";
+import { Event } from "../../_services/eventServiceApi";
 import Button from "./Button";
 import Input from "../Input";
 

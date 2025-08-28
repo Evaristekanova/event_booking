@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import Image from "next/image";
 
 import { CiLocationOn, CiCalendarDate } from "react-icons/ci";
 import { IoIosPeople } from "react-icons/io";
@@ -47,16 +47,19 @@ export const EventCard: React.FC<EventCardProps> = ({
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
       {/* Event Image */}
-      {/* {event.imageUrl && (
-        <div className="h-48 bg-gray-200 overflow-hidden">
-          <img
-            src={event.imageUrl}
-            alt={event.title}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      )} */}
-
+      <div className="h-48 bg-gray-200 overflow-hidden">
+        <Image
+          src={
+            event?.imageUrl ||
+            "https://images.pexels.com/photos/301987/pexels-photo-301987.jpeg"
+          }
+          alt={event.title}
+          className="w-full h-full object-cover"
+          width={500}
+          height={500}
+          quality={100}
+        />
+      </div>
       {/* Event Header */}
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-start justify-between mb-2">
@@ -85,7 +88,6 @@ export const EventCard: React.FC<EventCardProps> = ({
           </div>
         </div>
       </div>
-
       {/* Attendance Bar */}
       <div className="px-6 py-3 bg-gray-50">
         <div className="flex items-center justify-between text-sm mb-1">
@@ -106,7 +108,6 @@ export const EventCard: React.FC<EventCardProps> = ({
           />
         </div>
       </div>
-
       {/* Event Footer */}
       <div className="p-6 bg-white">
         <div className="flex items-center justify-between mb-4">

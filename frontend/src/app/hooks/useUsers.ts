@@ -6,7 +6,8 @@ import {
   updateProfileApi,
   getUsersApi,
   getUserByIdApi,
-  deleteUserApi,
+  activateUserApi,
+  deactivateUserApi,
 } from "../_services/userServiceApi";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -110,12 +111,12 @@ export const useUpdateProfile = () => {
   });
 };
 
-export const useUsers = (page: number = 1, limit: number = 10) => {
+export const useUsers = () => {
   const { token } = useAuth();
 
   return useQuery({
-    queryKey: ["users", page, limit],
-    queryFn: () => getUsersApi(token!, page, limit),
+    queryKey: ["users"],
+    queryFn: () => getUsersApi(token!),
     enabled: !!token,
   });
 };
@@ -130,18 +131,28 @@ export const useUserById = (userId: string) => {
   });
 };
 
-export const useDeleteUser = () => {
+export const useActivateUser = () => {
   const queryClient = useQueryClient();
   const { token } = useAuth();
 
   return useMutation({
-    mutationFn: (userId: string) => deleteUserApi(token!, userId),
+    mutationFn: (userId: string) => activateUserApi(token!, userId),
     onSuccess: (data) => {
-      toast.success(data.message || "User deleted successfully!");
+      toast.success(data.message || "User activated successfully!");
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
-    onError: (error) => {
-      toast.error(error.message || "Failed to delete user");
+  });
+};
+
+export const useDeactivateUser = () => {
+  const queryClient = useQueryClient();
+  const { token } = useAuth();
+
+  return useMutation({
+    mutationFn: (userId: string) => deactivateUserApi(token!, userId),
+    onSuccess: (data) => {
+      toast.success(data.message || "User deactivated successfully!");
+      queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
 };

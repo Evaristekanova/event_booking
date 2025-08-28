@@ -15,8 +15,9 @@ export {
   useUpdateProfile,
   useUsers,
   useUserById,
-  useDeleteUser,
+  useActivateUser,
+  useDeactivateUser,
 } from "./useUsers";
 export { useEvents, useCreateEvent, useUpdateEvent } from "./useEvents";
-export { useBookings, useCreateBooking } from "./useBookings";
-export { useClickOutside } from "./useClickOutside";
+export { useBooking, useCreateBooking } from "./useBookings";
+export { useOutsideClick } from "./useClickOutside";

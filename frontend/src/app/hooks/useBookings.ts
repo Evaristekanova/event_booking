@@ -8,7 +8,6 @@ import {
   updateBookingApi,
   cancelBookingApi,
   getBookingStatsApi,
-  type Booking,
   type CreateBookingInput,
   type UpdateBookingInput,
 } from "../_services/bookingServiceApi";

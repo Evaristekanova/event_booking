@@ -30,6 +30,7 @@ export const navItems: NavItem[] = [
     label: "Bookings",
     href: "/dashboard/bookings",
     icon: <FaBook size={20} />,
+    
   },
   // Admin-only items
   {

@@ -6,7 +6,8 @@ import {
   updateProfile,
   getUsers,
   getUser,
-  removeUser,
+  deactivate,
+  activate,
 } from "../controllers/userController";
 import { authenticateToken } from "../middleware/auth";
 import { validateRole } from "../middleware/roleCheck";
@@ -24,6 +25,17 @@ router.put("/profile", authenticateToken, updateProfile);
 // Admin only routes
 router.get("/", authenticateToken, validateRole(["ADMIN"]), getUsers);
 router.get("/:id", authenticateToken, validateRole(["ADMIN"]), getUser);
-router.delete("/:id", authenticateToken, validateRole(["ADMIN"]), removeUser);
+router.put(
+  "/deactivate/:id",
+  authenticateToken,
+  validateRole(["ADMIN"]),
+  deactivate,
+);
+router.put(
+  "/activate/:id",
+  authenticateToken,
+  validateRole(["ADMIN"]),
+  activate,
+);
 
 export default router;

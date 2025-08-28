@@ -115,19 +115,16 @@ export const updateUser = async (
   return user;
 };
 
-export const getAllUsers = async (page: number = 1, limit: number = 10) => {
-  const skip = (page - 1) * limit;
-
+export const getAllUsers = async () => {
   const [users, total] = await Promise.all([
     prisma.user.findMany({
-      skip,
-      take: limit,
       select: {
         id: true,
         fullName: true,
         email: true,
         phone: true,
         role: true,
+        status: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -138,18 +135,40 @@ export const getAllUsers = async (page: number = 1, limit: number = 10) => {
 
   return {
     users,
-    pagination: {
-      page,
-      limit,
-      total,
-      totalPages: Math.ceil(total / limit),
-    },
   };
 };
 
-export const deleteUser = async (id: string) => {
-  const user = await prisma.user.delete({
+export const deactivateUser = async (id: string) => {
+  const user = await prisma.user.update({
     where: { id },
+    data: { status: "INACTIVE" },
+    select: {
+      id: true,
+      fullName: true,
+      email: true,
+      phone: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+
+  return user;
+};
+
+export const activateUser = async (id: string) => {
+  const user = await prisma.user.update({
+    where: { id },
+    data: { status: "ACTIVE" },
+    select: {
+      id: true,
+      fullName: true,
+      email: true,
+      phone: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
+    },
   });
 
   return user;

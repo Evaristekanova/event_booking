@@ -130,7 +130,7 @@ export default function AnalyticsPage() {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">Monthly Trends</h3>
               <div className="space-y-4">
-                {monthlyData.slice(-6).map((month, index) => (
+                {monthlyData.slice(-6).map((month) => (
                   <div key={month.month} className="flex items-center justify-between">
                     <span className="text-sm font-medium text-gray-600 w-12">{month.month}</span>
                     <div className="flex-1 mx-4">

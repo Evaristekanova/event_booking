@@ -9,22 +9,22 @@ import Table from "@/app/components/table/table";
 import { EventColumns } from "./EventColumn";
 import Loader from "@/app/components/shared/Loader";
 import Button from "@/app/components/shared/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "@/app/components/shared/Modal";
 import { EventCard } from "@/app/components/EventCard";
 import { CreateBookingInput } from "@/app/_services/bookingServiceApi";
-import { useRouter } from "next/navigation";
 import { EventForm } from "@/app/components";
 import { EventFormData } from "@/app/components/shared/EventForm";
 import { useUpdateEvent, useCreateEvent } from "@/app/hooks/useEvents";
 import { useCreateBooking } from "@/app/hooks/useBookings";
+import { toast } from "react-toastify";
 
 export default function EventsPage() {
   const { user } = useAuth();
   const isAdmin = user?.role === "ADMIN";
-  const router = useRouter();
 
   const { data: eventsData, isPending, error } = useEvents();
+  const [events, setEvents] = useState<EventType[]>([]);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -56,6 +56,12 @@ export default function EventsPage() {
   };
 
   const bookEvent = (event: EventType) => {
+    const today = new Date();
+    const eventDate = new Date(event.date);
+    if (eventDate < today) {
+      toast.error("You cannot book an event that has already happened");
+      return;
+    }
     const bookingData: CreateBookingInput = {
       eventId: event.id,
       ticketType: "Standard",
@@ -67,9 +73,27 @@ export default function EventsPage() {
 
   const handleUpdateEvent = (formData: EventFormData) => {
     if (event) {
-      updateEvent({ id: event.id, eventData: formData });
+      updateEvent(
+        { id: event.id, eventData: formData },
+        {
+          onSuccess: () => {
+            closeModal();
+          },
+        }
+      );
     }
   };
+
+  useEffect(() => {
+    if (isAdmin) {
+      const adminEvents = eventsData?.data?.filter((event: EventType) =>
+        event.organizer.id === user?.id ? event : null
+      );
+      setEvents(adminEvents || []);
+    } else {
+      setEvents(eventsData?.data || []);
+    }
+  }, [eventsData, isAdmin, user]);
 
   if (isPending) {
     return <Loader />;
@@ -80,7 +104,11 @@ export default function EventsPage() {
       <DashboardLayout>
         <div className="px-10">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold">Check out our Events</h1>
+            <h1 className="text-2xl font-bold">
+              {isAdmin
+                ? "Check out the events you have created"
+                : "Check out our Events"}
+            </h1>
             {isAdmin && (
               <Button
                 className="hover:bg-purple-700 cursor-pointer rounded-md"
@@ -90,10 +118,10 @@ export default function EventsPage() {
               </Button>
             )}
           </div>
-          {eventsData?.data && (
+          {eventsData && (
             <Table
               columns={EventColumns(onView, onEdit, isAdmin)}
-              data={eventsData?.data}
+              data={events}
               searchKey="title"
               searchPlaceholder="Search by title"
             />
@@ -121,7 +149,8 @@ export default function EventsPage() {
                   bookEvent(event);
                 }
                 if (action === "edit") {
-                  router.push(`/events/${event.id}`);
+                  setIsViewModalOpen(false);
+                  onEdit(event);
                 }
               }}
               isLoading={isLoadingBooking}
@@ -129,6 +158,7 @@ export default function EventsPage() {
           )}
         </Modal>
         <Modal
+          title="Edit Event"
           isOpen={isEditModalOpen}
           onClose={() => {
             setIsEditModalOpen(false);

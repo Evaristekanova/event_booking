@@ -146,15 +146,39 @@ export const getUserByIdApi = async (token: string, userId: string) => {
   }
 };
 
-export const deleteUserApi = async (token: string, userId: string) => {
+export const activateUserApi = async (token: string, userId: string) => {
   try {
-    const response = await fetch(`${API_URL}/api/v1/users/${userId}`, {
-      method: "DELETE",
+    const response = await fetch(`${API_URL}/api/v1/users/activate/${userId}`, {
+      method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData?.message);
+    }
+    return await response.json();
+  } catch (error) {
+    throw new Error(
+      error instanceof Error ? error.message : "An unknown error occurred"
+    );
+  }
+};
+
+export const deactivateUserApi = async (token: string, userId: string) => {
+  try {
+    const response = await fetch(
+      `${API_URL}/api/v1/users/deactivate/${userId}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData?.message);

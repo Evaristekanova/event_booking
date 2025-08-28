@@ -16,7 +16,6 @@ import { useAuth } from "../contexts/AuthContext";
 
 // Query keys
 
-
 // Hook for getting all events with pagination
 export const useEvents = () => {
   return useQuery({
@@ -48,7 +47,6 @@ export const useUpcomingEvents = () => {
   return useQuery({
     queryKey: ["upcoming-events"],
     queryFn: () => getUpcomingEventsApi(),
-
   });
 };
 
@@ -83,12 +81,9 @@ export const useUpdateEvent = () => {
       id: string;
       eventData: UpdateEventInput;
     }) => updateEventApi(id, eventData, token!),
-    onSuccess: (updatedEvent) => {
+    onSuccess: () => {
       toast.success("Event updated successfully!");
       queryClient.invalidateQueries({ queryKey: ["events"] });
-      queryClient.invalidateQueries({
-        queryKey: ["event", updatedEvent.id],
-      });
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to update event");

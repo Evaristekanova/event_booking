@@ -42,7 +42,7 @@ export default function Modal({
               </button>
             </div>
 
-            <div className="mb-4">{children}</div>
+            <div className="mb-4 overflow-y-auto max-h-[80vh]">{children}</div>
 
             {/* Footer */}
             {footer && (
@@ -54,54 +54,3 @@ export default function Modal({
     </AnimatePresence>
   );
 }
-
-// import { type ReactNode, useEffect, useState } from "react";
-
-// type ModalProps = {
-//   isOpen: boolean;
-//   onClose: () => void;
-//   title?: string;
-//   children: ReactNode;
-// };
-
-// export default function Modal({
-//   isOpen,
-//   onClose,
-//   title,
-//   children,
-// }: ModalProps) {
-//   const [show, setShow] = useState(isOpen);
-
-//   useEffect(() => {
-//     if (isOpen) setShow(true);
-//   }, [isOpen]);
-
-//   if (!show) return null;
-
-//   return (
-//     <div
-//       className={`fixed inset-0 z-50 flex items-center justify-center
-//     ${isOpen ? "fade-in" : "fade-out"} bg-black/50`}
-//     >
-//       <div
-//         className={`${
-//           isOpen ? "scale-in" : "scale-out"
-//         } bg-white rounded-2xl shadow-lg w-full max-w-md p-6 relative`}
-//       >
-//         {/* Close button */}
-//         <button
-//           onClick={onClose}
-//           className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
-//         >
-//           ✕
-//         </button>
-
-//         {/* Title */}
-//         {title && <h2 className="text-lg font-semibold mb-4">{title}</h2>}
-
-//         {/* Content */}
-//         <div>{children}</div>
-//       </div>
-//     </div>
-//   );
-// }
