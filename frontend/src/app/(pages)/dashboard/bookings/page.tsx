@@ -11,7 +11,7 @@ export default function BookingsPage() {
   const { data: bookings, isPending, error } = useUserBookings();
 
   if (isPending) {
-    return <Loader />;
+    return <Loader className="h-[80vh]" />;
   }
 
   if (error) {

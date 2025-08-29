@@ -4,6 +4,7 @@ import React, { ReactNode } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import Loader from "./shared/Loader";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -20,7 +21,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 }) => {
   const { isAuthenticated, isAdmin, loading } = useAuth();
   const router = useRouter();
-
   useEffect(() => {
     if (requireAuth && !isAuthenticated) {
       router.push(redirectTo);
@@ -36,6 +36,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     redirectTo,
     router,
   ]);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   if ((requireAuth && !isAuthenticated) || (requireAdmin && !isAdmin)) {
     return null;

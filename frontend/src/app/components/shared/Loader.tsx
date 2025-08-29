@@ -1,6 +1,10 @@
-export default function Loader() {
+export default function Loader({ className }: { className?: string }) {
   return (
-    <div className="h-screen w-screen grid place-content-center">
+    <div
+      className={` grid place-content-center ${
+        className ? className : "h-screen w-full"
+      }`}
+    >
       <div className="loader" />
     </div>
   );

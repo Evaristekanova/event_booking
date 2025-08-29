@@ -27,7 +27,7 @@ export default function CalendarPage() {
   const calendarData = useMemo(() => {
     if (isAdmin) {
       return (
-        eventsData?.data?.map((event: EventType) => ({
+        eventsData?.data?.events?.map((event: EventType) => ({
           id: event.id,
           title: event.title,
           date: event.date,
@@ -45,7 +45,7 @@ export default function CalendarPage() {
       );
     } else {
       return (
-        bookings?.data?.map((booking: Booking) => ({
+        bookings?.data?.events.map((booking: Booking) => ({
           id: booking.id,
           title: booking?.event?.title,
           date: booking?.event?.date,
@@ -69,7 +69,7 @@ export default function CalendarPage() {
   const error = isAdmin ? eventsError : bookingsError;
 
   if (isLoading) {
-    return <Loader />;
+    return <Loader className="h-[80vh]" />;
   }
 
   if (error) {

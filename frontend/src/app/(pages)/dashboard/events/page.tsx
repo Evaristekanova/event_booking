@@ -84,17 +84,17 @@ export default function EventsPage() {
 
   useEffect(() => {
     if (isAdmin) {
-      const adminEvents = eventsData?.data?.filter((event: EventType) =>
+      const adminEvents = eventsData?.data?.events?.filter((event: EventType) =>
         event.organizer?.id === user?.id ? event : null
       );
       setEvents(adminEvents || []);
     } else {
-      setEvents(eventsData?.data || []);
+      setEvents(eventsData?.data.events || []);
     }
   }, [eventsData, isAdmin, user]);
 
   if (isPending) {
-    return <Loader />;
+    return <Loader className="h-[80vh]" />;
   }
 
   return (
