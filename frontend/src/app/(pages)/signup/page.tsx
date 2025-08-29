@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useRegister } from "@/app/hooks";
 
 export default function SignupPage() {
-  const { mutate: signupFn, isPending, error } = useRegister();
+  const { mutate: signupFn, isPending } = useRegister();
 
   const [formData, setFormData] = useState({
     fullName: "",
