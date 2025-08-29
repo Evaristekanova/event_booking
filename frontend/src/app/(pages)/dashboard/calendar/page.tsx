@@ -69,7 +69,13 @@ export default function CalendarPage() {
   const error = isAdmin ? eventsError : bookingsError;
 
   if (isLoading) {
-    return <Loader className="h-[80vh]" />;
+    return (
+      <ProtectedRoute requireAdmin={true}>
+        <DashboardLayout>
+          <Loader className="h-[80vh]" />
+        </DashboardLayout>
+      </ProtectedRoute>
+    );
   }
 
   if (error) {

@@ -11,7 +11,13 @@ export default function BookingsPage() {
   const { data: bookings, isPending, error } = useUserBookings();
 
   if (isPending) {
-    return <Loader className="h-[80vh]" />;
+    return (
+      <ProtectedRoute requireAdmin={true}>
+        <DashboardLayout>
+          <Loader className="h-[80vh]" />
+        </DashboardLayout>
+      </ProtectedRoute>
+    );
   }
 
   if (error) {

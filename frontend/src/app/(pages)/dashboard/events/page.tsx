@@ -94,7 +94,13 @@ export default function EventsPage() {
   }, [eventsData, isAdmin, user]);
 
   if (isPending) {
-    return <Loader className="h-[80vh]" />;
+    return (
+      <ProtectedRoute requireAdmin={true}>
+        <DashboardLayout>
+          <Loader className="h-[80vh]" />
+        </DashboardLayout>
+      </ProtectedRoute>
+    );
   }
 
   return (

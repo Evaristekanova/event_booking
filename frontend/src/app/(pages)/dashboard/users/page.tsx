@@ -48,7 +48,14 @@ export default function UsersPage() {
     setIsModalOpen(true);
   };
 
-  if (isLoading) return <Loader className="h-[80vh]" />;
+  if (isLoading)
+    return (
+      <ProtectedRoute requireAdmin={true}>
+        <DashboardLayout>
+          <Loader className="h-[80vh]" />
+        </DashboardLayout>
+      </ProtectedRoute>
+    );
 
   return (
     <ProtectedRoute requireAdmin={true}>
