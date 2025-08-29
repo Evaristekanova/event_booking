@@ -77,15 +77,16 @@ export default function SignupPage() {
     if (!validateForm()) {
       return;
     }
-    signupFn(formData);
-    if (!error) {
-      setFormData({
-        fullName: "",
-        email: "",
-        password: "",
-        phone: "",
-      });
-    }
+    signupFn(formData, {
+      onSuccess: () => {
+        setFormData({
+          fullName: "",
+          email: "",
+          password: "",
+          phone: "",
+        });
+      },
+    });
   };
 
   return (

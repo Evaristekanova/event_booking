@@ -37,10 +37,13 @@ export default function Login() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) return;
-    loginFn(formData);
-    setFormData({
-      email: "",
-      password: "",
+    loginFn(formData, {
+      onSuccess: () => {
+        setFormData({
+          email: "",
+          password: "",
+        });
+      },
     });
   };
 
