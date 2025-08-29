@@ -110,7 +110,7 @@ export const getTopEvents = async (
     return events.map((event) => ({
       title: event.title,
       bookings: event.bookings.length,
-      revenue: event.price * event.bookings.length,
+      revenue: Number(event.price) * event.bookings.length,
       attendance: Math.round((event.bookings.length / event.capacity) * 100),
     }));
   }

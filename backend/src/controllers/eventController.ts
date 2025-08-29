@@ -1,14 +1,17 @@
 import { Request, Response } from "express";
-import { 
-  createEvent, 
-  getEventById, 
-  getAllEvents, 
-  updateEvent, 
-  deleteEvent, 
+import {
+  createEvent,
+  getEventById,
+  getAllEvents,
+  updateEvent,
+  deleteEvent,
   getEventsByCategory,
-  getUpcomingEvents 
+  getUpcomingEvents,
 } from "../services/eventService";
-import { CreateEventInput, UpdateEventInput } from "../validations/eventValidation";
+import {
+  CreateEventInput,
+  UpdateEventInput,
+} from "../validations/eventValidation";
 
 export const createNewEvent = async (req: Request, res: Response) => {
   try {
@@ -32,7 +35,8 @@ export const createNewEvent = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: error instanceof Error ? error.message : "Failed to create event",
+      message:
+        error instanceof Error ? error.message : "Failed to create event",
     });
   }
 };
@@ -58,16 +62,12 @@ export const getEvent = async (req: Request, res: Response) => {
 
 export const getEvents = async (req: Request, res: Response) => {
   try {
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 10;
-
-    const result = await getAllEvents(page, limit);
+    const result = await getAllEvents();
 
     res.status(200).json({
       success: true,
       message: "Events retrieved successfully",
-      data: result.events,
-      pagination: result.pagination,
+      data: result, 
     });
   } catch (error) {
     res.status(500).json({
@@ -100,7 +100,8 @@ export const updateEventById = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: error instanceof Error ? error.message : "Failed to update event",
+      message:
+        error instanceof Error ? error.message : "Failed to update event",
     });
   }
 };
@@ -126,12 +127,16 @@ export const removeEvent = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: error instanceof Error ? error.message : "Failed to delete event",
+      message:
+        error instanceof Error ? error.message : "Failed to delete event",
     });
   }
 };
 
-export const getEventsByCategoryHandler = async (req: Request, res: Response) => {
+export const getEventsByCategoryHandler = async (
+  req: Request,
+  res: Response,
+) => {
   try {
     const { category } = req.params;
 
@@ -145,7 +150,10 @@ export const getEventsByCategoryHandler = async (req: Request, res: Response) =>
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error instanceof Error ? error.message : "Failed to get events by category",
+      message:
+        error instanceof Error
+          ? error.message
+          : "Failed to get events by category",
     });
   }
 };
@@ -164,7 +172,10 @@ export const getUpcomingEventsHandler = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error instanceof Error ? error.message : "Failed to get upcoming events",
+      message:
+        error instanceof Error
+          ? error.message
+          : "Failed to get upcoming events",
     });
   }
 };
